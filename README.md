@@ -6,4 +6,3 @@ Generic list and form filler for group activities with minors.
 2. Set up the email text in "email_aux.py".
 3. Set up "renamer.py", matching the fields in the input .csv (left, in Spanish) with the standard names in the pandas df (right, english)
 4. Run "run_inscripciones.py" + SO (linux or macos). This script takes new data from "input_data" (from "last_time" onwards) and writes it in "database", fills the authorization and sends the confirmation email to the family.
-

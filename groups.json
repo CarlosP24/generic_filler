@@ -1,0 +1,14 @@
+{
+    "centro1" : {
+        "responsable" : "nombre apellidos",
+        "contacto" : "teléfono"
+    },
+    "centro2" : {
+        "responsable" : "nombre apellidos",
+        "contacto" : "teléfono"
+    },
+    "Todos" : {
+        "responsable" : "-",
+        "contacto" : "-"
+    }
+}
