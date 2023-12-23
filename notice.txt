@@ -1,0 +1,5 @@
+<p style="width: 650px; font-size: 0.8em;">
+    De conformidad con el artículo 13 del Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo y la Ley Orgánica 3/2018 de 5 de diciembre (LOPDGDD) en materia de protección de datos personales le informamos que los datos personales recabados del propio interesado serán tratados bajo la responsabilidad de <b>Juventudes Marianas Vicencianas España</b>, con CIF G28672525 y domicilio social en C/José Abascal 30, 28003, Madrid.
+    La finalidad para la que se recogen sus datos es prestarle el servicio solicitado y realizar la facturación del mismo. Sus datos formarán parte de nuestra base de datos durante el tiempo necesario para cumplir con el servicio y las disposiciones legales. No serán cedidos a terceros salvo en los casos en que exista una obligación legal.
+    Puede ejercer sus derechos de acceso, rectificación, oposición, limitación, portabilidad y supresión ante el responsable del tratamiento, además de acudir a la autoridad de control competente (AEPD).
+</p>
