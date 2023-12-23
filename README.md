@@ -7,6 +7,7 @@ For each use of this code we just have to make sure that all fields in the Googl
 # REQUIREMENTS
 Python packages:
     - json, pandas, mailmerge, yagmail
+
 PDF writers:
     - libreoffice
 
