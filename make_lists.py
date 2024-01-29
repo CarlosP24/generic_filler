@@ -28,10 +28,8 @@ for g_name, g_data in group_data:
 for g in groups:
     g.create_group(df)
 
-try:
-    os.mkdir("Listas")
-except:
-    pass
+if not os.path.isdir(config["list_dir"]):
+    os.mkdir(config["list_dir"])
 
 
 # Write lists

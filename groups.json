@@ -1,11 +1,27 @@
 {
-    "centro1" : {
-        "responsable" : "nombre apellidos",
-        "contacto" : "teléfono"
+    "Parroquia San Vicente de Paúl" : {
+        "responsable" : "Fátima García",
+        "contacto" : "663563123"
     },
-    "centro2" : {
-        "responsable" : "nombre apellidos",
-        "contacto" : "teléfono"
+    "Colegio Sagrado Corazón" : {
+        "responsable" : "Inés Tello",
+        "contacto" : "658159185"
+    },
+    "Colegio La Inmaculada-Marillac" : {
+        "responsable" : "Lucas Pomeda",
+        "contacto" : "651483545"
+    },
+    "Colegio La Inmaculada (Leganés)" : {
+        "responsable" : "Víctor Serrano",
+        "contacto" : "671246376"
+    },
+    "Colegio San Juan Bautista (Toledo)" : {
+        "responsable" : "Iria Gálvez",
+        "contacto" : "608861135"
+    },
+    "Colegio San José (Valdemoro)" : {
+        "responsable" : "Alba Laborde",
+        "contacto" : "682473104"
     },
     "Todos" : {
         "responsable" : "-",

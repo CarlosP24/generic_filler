@@ -23,6 +23,9 @@ else:
 
 config = json.load(open('config.json'))
 
+if not os.path.isdir(config["auth_dir"]):
+    os.mkdir(config["auth_dir"])
+
 # Import data 
 df_old = pd.read_csv(config["input_data"], dtype = object)
 if df_old.empty:

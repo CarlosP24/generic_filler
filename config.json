@@ -4,7 +4,8 @@
     "last_time": "2023-11-24 14:00:01",
     "auth_template": "autorizacion.docx",
     "list_template": "template_list.docx",
-    "auth_dir": "Autorizaciones",
+    "auth_dir": "../Autorizaciones",
+    "list_dir": "../Listas",
     "email": {
         "account": "jmv.sanvicentepaul@gmail.com",
         "oatuh2_file": "~/oauth2_creds.json",
