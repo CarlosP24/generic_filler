@@ -22,6 +22,7 @@ else:
     raise SystemExit
 
 config = json.load(open('config.json'))
+groups = json.load(open('groups.json'))
 
 if not os.path.isdir(config["auth_dir"]):
     os.mkdir(config["auth_dir"])
@@ -48,7 +49,7 @@ df = df_old[df_old.timestamp > last_time]
 df.timestamp = pd.to_datetime(df.timestamp, dayfirst = True)
 [df.update(df[n].apply(sn.sanitize_name)) for n in names]
 [df.update(df[s].apply(sn.sanitize_surnames)) for s in surnames]
-[df.update(df[p].apply(sn.sanitize_phone)) for p in ['phone_cat', 'guardian_phone']]
+[df.update(df[p].apply(sn.sanitize_phone)) for p in ['guardian_phone']]
 #df.guardian_phone = df.guardian_phone.astype('Float64')
 #df.guardian_phone = df.guardian_phone.astype('Int64')
 df.birthdate = pd.to_datetime(df.birthdate, dayfirst = True)
@@ -72,14 +73,15 @@ with open(notice_f) as f:
     notice = f.read()
 
 for index, row in df.iterrows():
-    if row.category == "Responsable":
-        continue
     document = MailMerge(config['auth_template'])
     print(f"Inscripción de {row['name']} {row['surnames']}.")
-    auth_file = wr.write_auth(row, document, config["auth_dir"])
-    os.system(f"{pdf_writer} --convert-to pdf --outdir {config['auth_dir']} '{auth_file}'")
+    output_dir = f"{config['auth_dir']}/{groups[row['center_name']]['short']}"
+    if not os.path.isdir(output_dir):
+        os.mkdir(output_dir)
+    auth_file = wr.write_auth(row, document, output_dir)
+    os.system(f"{pdf_writer} --convert-to pdf --outdir {output_dir} '{auth_file}'")
     auth_file = auth_file.replace('docx', 'pdf')
-    subject, text = wr.write_email(row,)
+    subject, text = wr.write_email(row, groups[row['center_name']]['responsable'])
     yag.send(to=row['guardian_email'], subject=subject, contents=[yagmail.inline(banner), text, yagmail.inline(signature), notice], attachments=[auth_file])
     print(f"Inscripción finalizada. Email enviado con éxito a {row.guardian_email}.")
 
@@ -90,10 +92,13 @@ with open('config.json', 'w', encoding='utf-8') as f:
     json.dump(config, f, ensure_ascii=False, indent=4)
 
 # Save data
-df_curernt = pd.read_csv(config["database"])
-frames = [df_curernt, df]
-df_new = pd.concat(frames)
-for col in df.columns.values.tolist():
-    if re.search("Unnamed", col):
-        df_new = df_new.drop(col, axis=1)
-df_new.to_csv(config["database"])
+if not os.path.isfile(config["database"]):
+    df.to_csv(config["database"])
+else:
+    df_curernt = pd.read_csv(config["database"])
+    frames = [df_curernt, df]
+    df_new = pd.concat(frames)
+    for col in df.columns.values.tolist():
+        if re.search("Unnamed", col):
+            df_new = df_new.drop(col, axis=1)
+    df_new.to_csv(config["database"])

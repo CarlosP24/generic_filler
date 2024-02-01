@@ -1,4 +1,5 @@
 from mailmerge import MailMerge
+from datetime import date
 import os
 
 def write_form_dict(row):
@@ -19,6 +20,8 @@ class group:
         self.responsible = responsible
         self.responsible_phone = responsible_phone
         self.size = 0
+        self.boys = 0
+        self.girls = 0
     
     def __str__(self):
         return f"Centro: {self.center}. Responsable: {self.responsible}. Participantes: {self.size}"
@@ -29,6 +32,8 @@ class group:
             "responsible": self.responsible,
             "responsible_phone": self.responsible_phone,
             "num_center" : str(self.size),
+            "num_girls" : str(self.girls),
+            "num_boys" : str(self.boys),
             "last_up" : str(date.today()),
         }
         return bdict
@@ -50,11 +55,15 @@ class group:
                 comments_dict[comments] = "Alergias: " + group_df.loc[ind, 'allergies_detail'] + ". "
         
         self.group_df = group_df
-        self.size = len(group_df[group_df.category == 'Participante'])
+        self.size = len(group_df)
+        count_sex = group_df.sex.value_counts()
+        self.boys = count_sex.get('Masculino', 0)
+        self.girls = count_sex.get('Femenino', 0)
         self.comments_dict = comments_dict
     
     def list_dicts(self):
-        lf = self.group_df.loc[self.group_df.category == 'Participante']
+        #lf = self.group_df.loc[self.group_df.category == 'Participante']
+        lf = self.group_df
         list_dicts = []
         for ind in lf.index:
             list_dict = {
