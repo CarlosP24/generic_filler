@@ -52,7 +52,7 @@ class group:
             if group_df.loc[ind, 'allergies']:
                 comments += 1
                 group_df.loc[ind, 'obs'] = comments
-                comments_dict[comments] = "Alergias: " + group_df.loc[ind, 'allergies_detail'] + ". "
+                comments_dict[comments] = "ATENCIÓN:" +  group_df.loc[ind, 'allergies_detail'] + ". "
         
         self.group_df = group_df
         self.size = len(group_df)
