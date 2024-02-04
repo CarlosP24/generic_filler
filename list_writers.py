@@ -15,10 +15,11 @@ def write_form_dict(row):
     return form_dict
 
 class group:
-    def __init__(self, center = "", responsible = "", responsible_phone = ""):
+    def __init__(self, center = "", responsible = "", responsible_phone = "", center_short = ""):
         self.center = center
         self.responsible = responsible
         self.responsible_phone = responsible_phone
+        self.short = center_short
         self.size = 0
         self.boys = 0
         self.girls = 0
@@ -61,7 +62,7 @@ class group:
         self.girls = count_sex.get('Femenino', 0)
         self.comments_dict = comments_dict
     
-    def list_dicts(self):
+    def list_dicts(self, group_data):
         #lf = self.group_df.loc[self.group_df.category == 'Participante']
         lf = self.group_df
         list_dicts = []
@@ -74,7 +75,7 @@ class group:
                 'pics' : 'Sí' if lf.at[ind, 'image_rights'] else 'No',
                 'alone' : 'Sí' if lf.at[ind, 'alone'] else 'No',
                 'obs' : str(lf.at[ind, 'obs']),
-                'center_name' : lf.at[ind, 'center_name']
+                'center_name' : group_data[lf.at[ind, 'center_name']]['short']
             }
             list_dicts.append(list_dict)
         return list_dicts 
@@ -114,11 +115,11 @@ def make_cat_list(groups, template, output_dir):
     document.write(output)
     os.system(f"soffice --convert-to pdf --outdir {output_dir} '{output}'")
 
-def make_lists(group, template, output_dir):
+def make_lists(group, template, output_dir, group_data):
     output = f"{output_dir}/{group.center}.docx"
     document = MailMerge(template)
     document.merge(**group.get_basic_info())
-    document.merge_rows('name', group.list_dicts())
+    document.merge_rows('name', group.list_dicts(group_data))
     document.merge_rows('num', group.list_comments())
     document.write(output)
     os.system(f"soffice --convert-to pdf --outdir {output_dir} '{output}'")
