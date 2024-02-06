@@ -1,7 +1,7 @@
 {
     "input_data": "Inscripciones_up.csv",
     "database": "Inscripciones.csv",
-    "last_time": "2024-02-04 18:39:17",
+    "last_time": "2024-02-06 18:31:24",
     "auth_template": "autorizacion.docx",
     "list_template": "template_list.docx",
     "auth_dir": "../Autorizaciones",

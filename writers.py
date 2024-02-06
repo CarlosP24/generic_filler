@@ -14,6 +14,7 @@ def write_form_dict(row):
     form_dict['image_rights'] = 'AUTORIZO' if row['image_rights'] else 'NO AUTORIZO'
     form_dict['alone'] = 'AUTORIZO' if row['alone'] else 'NO AUTORIZO'
     form_dict['sex'] = 'hijo' if row['sex'] == 'Masculino' else 'hija'
+    form_dict['soloa'] = 'solo' if row['sex'] == 'Masculino' else 'sola'
     form_dict['alergies'] = 'no presenta ninguna alergia, intolerancia o condición médica que deba ser tenida en cuenta por la organización' if not row['allergies'] else f"presenta las siguientes alergias, intolerancias o condiciones médicas: {row['allergies_detail']}"
     form_dict['guardian_phone'] = row['guardian_phone']
     return form_dict
