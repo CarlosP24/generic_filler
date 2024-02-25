@@ -123,3 +123,15 @@ def make_lists(group, template, output_dir, group_data):
     document.merge_rows('num', group.list_comments())
     document.write(output)
     os.system(f"soffice --convert-to pdf --outdir {output_dir} '{output}'")
+
+def make_stickers(df, template, output_dir, group_data):
+    output = f"{output_dir}/etiquetas.docx"
+    list = []
+    for ind in df.index:
+        list.append(f"{df.at[ind,'name']} {df.at[ind,'surnames']}\n {group_data[df.at[ind,'center_name']]['short']}")
+    chunked_list = [list[i:i + 3] for i in range(0, len(list), 3)]
+    sticker_list = [{"c1" : row[0], "c2" : row[1] if len(row) > 1 else "", "c3" : row[2] if len(row) > 2 else ""} for row in chunked_list] 
+    document = MailMerge(template)
+    document.merge_rows('c1', sticker_list)
+    document.write(output)
+    os.system(f"soffice --convert-to pdf --outdir {output_dir} '{output}'")
