@@ -34,7 +34,6 @@ for g in groups:
 if not os.path.isdir(config["list_dir"]):
     os.mkdir(config["list_dir"])
 
-
 # Write lists
 template = "template_list.docx"
 template_full = "template_list_full.docx"
@@ -44,5 +43,11 @@ for g in groups:
         continue
     lw.make_lists(g, template, config["list_dir"], group_data)   
 
+template = "template_stickers.docx"
+lw.make_stickers(df, template, config["list_dir"], group_data)
+
+aux_data = json.load(open('aux.json'))
+template = "template_stats.docx"
+lw.make_stats(groups, template, config["list_dir"], group_data, aux_data)
 #template = "template_list_cats.docx"
 #lw.make_cat_list(groups, template, config["list_dir"])

@@ -27,9 +27,10 @@ class group:
     def __str__(self):
         return f"Centro: {self.center}. Responsable: {self.responsible}. Participantes: {self.size}"
     
-    def get_basic_info(self):
+    def get_basic_info(self, group_data):
         bdict = {
-            "center": self.center,
+            "center": f"{self.center} - {group_data[self.center]['code']}",
+            "short" : group_data[self.center]['short'],
             "responsible": self.responsible,
             "responsible_phone": self.responsible_phone,
             "num_center" : str(self.size),
@@ -71,7 +72,7 @@ class group:
                 'name' : lf.at[ind, 'name'],
                 'surnames' : lf.at[ind, 'surnames'],
                 'year' : str(lf.at[ind, 'year']),
-                'phone' : f"{lf.at[ind, 'guardian_phone']}".rstrip('.0'),
+                'phone' : f"{lf.at[ind, 'guardian_phone']}",
                 'pics' : 'Sí' if lf.at[ind, 'image_rights'] else 'No',
                 'alone' : 'Sí' if lf.at[ind, 'alone'] else 'No',
                 'obs' : str(lf.at[ind, 'obs']),
@@ -106,11 +107,11 @@ class group:
         return list_comments
 
 
-def make_cat_list(groups, template, output_dir):
+def make_cat_list(groups, template, output_dir, group_data):
     output = f"{output_dir}/catequistas.docx"
     group = groups[-1]
     document = MailMerge(template)
-    document.merge(**group.get_basic_info())
+    document.merge(**group.get_basic_info(group_data))
     document.merge_rows('name', group.list_dicts_cats())
     document.write(output)
     os.system(f"soffice --convert-to pdf --outdir {output_dir} '{output}'")
@@ -118,20 +119,46 @@ def make_cat_list(groups, template, output_dir):
 def make_lists(group, template, output_dir, group_data):
     output = f"{output_dir}/{group.center}.docx"
     document = MailMerge(template)
-    document.merge(**group.get_basic_info())
+    document.merge(**group.get_basic_info(group_data))
     document.merge_rows('name', group.list_dicts(group_data))
     document.merge_rows('num', group.list_comments())
     document.write(output)
     os.system(f"soffice --convert-to pdf --outdir {output_dir} '{output}'")
 
 def make_stickers(df, template, output_dir, group_data):
+    df.sort_values(by = ['center_name', 'surnames'], inplace=True)
     output = f"{output_dir}/etiquetas.docx"
     list = []
     for ind in df.index:
-        list.append(f"{df.at[ind,'name']} {df.at[ind,'surnames']}\n {group_data[df.at[ind,'center_name']]['short']}")
+        list.append(f"{df.at[ind,'name']} {df.at[ind,'surnames']}\n {group_data[df.at[ind,'center_name']]['short']} - {group_data[df.at[ind,'center_name']]['code']}")
+    for center, center_data in group_data.items():
+        list.append(f"{center}\n {center_data['code']}")
+    list.append("Listado Completo")
+    list.append("Listado Alergias")
+    list.append("Documentación Catequistas")
     chunked_list = [list[i:i + 3] for i in range(0, len(list), 3)]
     sticker_list = [{"c1" : row[0], "c2" : row[1] if len(row) > 1 else "", "c3" : row[2] if len(row) > 2 else ""} for row in chunked_list] 
     document = MailMerge(template)
     document.merge_rows('c1', sticker_list)
+    document.write(output)
+    os.system(f"soffice --convert-to pdf --outdir {output_dir} '{output}'")
+
+def make_stats(groups, template, output_dir, group_data, aux_data):
+    monitores = {
+        "res_list" : "".join([f"{group_data[center]['responsable']}\n" for center in group_data.keys()][0:-1]),
+        "num_res_girls" : str([group_data[center]['sex'] for center in group_data.keys()].count("M")),
+        "num_res_boys" : str([group_data[center]['sex'] for center in group_data.keys()].count("H")),
+        "num_res" : str(len(group_data)-1),
+        "cat_list" : "".join([f"{cat}\n" for cat in aux_data['cats']]),
+        "num_cat_girls" : str([aux_data['cats'][cat]['sex'] for cat in aux_data["cats"].keys()].count("M")),
+        "num_cat_boys" : str([aux_data['cats'][cat]['sex'] for cat in aux_data["cats"].keys()].count("H")),
+        "num_cat" : str(len(aux_data["cats"])),
+        "num_cook" : str(aux_data["cooks"]["number"]),
+        "last_up" : str(date.today())
+    }
+    output = f"{output_dir}/estadisticas.docx"
+    document = MailMerge(template)
+    document.merge(**monitores)
+    document.merge_rows('short', [group.get_basic_info(group_data) for group in groups])
     document.write(output)
     os.system(f"soffice --convert-to pdf --outdir {output_dir} '{output}'")
